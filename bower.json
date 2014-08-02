@@ -1,0 +1,28 @@
+{
+  "name": "frame-channels",
+  "description": "pub/sub channels between browser [i]frames",
+  "main": "build/frame-channels.js",
+  "license": "MIT",
+  "authors": [
+    "Benjamin Eidelman <beneidel@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benjamine/frame-channels.git"
+  },
+  "keywords": [
+    "pubsub",
+		"channel",
+		"frame",
+		"iframe",
+		"postmessage"
+  ],
+  "ignore": [
+    "test",
+    "demo",
+    "docs",
+    ".travis.yml",
+    "karma.conf.js",
+    "gulpfile.js"
+  ]
+}
