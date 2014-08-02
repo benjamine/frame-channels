@@ -27,9 +27,10 @@ ChannelIFrame.prototype.ready = function () {
       };
       channel.subscribe(readyListener);
 
-      var element = this.element || document.getElementById(options.id);
+      var element = self.element || document.getElementById(options.id);
       if (!element) {
         element = document.createElement('iframe');
+        self.element = element;
         element.id = options.id;
         element.src = options.url;
         if (typeof options.setup === 'function') {
@@ -40,13 +41,13 @@ ChannelIFrame.prototype.ready = function () {
         }
         document.body.appendChild(element);
       } else {
+        self.element = element;
         try {
           channel.push({ ping: true, respond: true });
         } catch (err) {
           console.log('failed to ping frame channel');
         }
       }
-      this.element = element;
 
       setTimeout(function(){
         if (!ready) {
@@ -158,7 +159,9 @@ ChannelIFrame.prototype.maximize = function() {
   element.style.width = '100%';
   element.style.height = '100%';
   element.contentWindow.focus();
-  this.preMaximize = pre;
+  if (!this.preMaximize) {
+    this.preMaximize = pre;
+  }
   return this;
 };
 

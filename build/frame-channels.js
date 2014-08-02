@@ -703,9 +703,10 @@ ChannelIFrame.prototype.ready = function () {
       };
       channel.subscribe(readyListener);
 
-      var element = this.element || document.getElementById(options.id);
+      var element = self.element || document.getElementById(options.id);
       if (!element) {
         element = document.createElement('iframe');
+        self.element = element;
         element.id = options.id;
         element.src = options.url;
         if (typeof options.setup === 'function') {
@@ -716,13 +717,13 @@ ChannelIFrame.prototype.ready = function () {
         }
         document.body.appendChild(element);
       } else {
+        self.element = element;
         try {
           channel.push({ ping: true, respond: true });
         } catch (err) {
           console.log('failed to ping frame channel');
         }
       }
-      this.element = element;
 
       setTimeout(function(){
         if (!ready) {
@@ -834,7 +835,9 @@ ChannelIFrame.prototype.maximize = function() {
   element.style.width = '100%';
   element.style.height = '100%';
   element.contentWindow.focus();
-  this.preMaximize = pre;
+  if (!this.preMaximize) {
+    this.preMaximize = pre;
+  }
   return this;
 };
 
@@ -892,6 +895,9 @@ Channel.prototype.findWindow = function () {
     return this._window;
   }
   var target = this.options.target;
+  if (!target && this.options.iframe && this.options.iframe.id) {
+    target = '#' + this.options.iframe.id;
+  }
   if (typeof target === 'string') {
     var element = document.querySelector(target);
     if (!element || !element.contentWindow) {
@@ -904,7 +910,7 @@ Channel.prototype.findWindow = function () {
     this._window = target;
     return this._window;
   }
-  return new Error('no valid target was provided (eg. #iframeIdOrSelector, window.parent, someWindow)');
+  throw new Error('no valid target was provided (eg. #iframeIdOrSelector, window.parent, someWindow)');
 };
 
 function waitMessageResponse(self, id, timeout, resolve, reject) {
@@ -1088,7 +1094,7 @@ if (inNode) {
 } else {
   // exports only for browser bundle
 	exports.homepage = 'https://github.com/benjamine/frame-channels';
-	exports.version = '0.0.0';
+	exports.version = '0.0.4';
 }
 
 }).call(this,_dereq_("1YiZ5S"))
