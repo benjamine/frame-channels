@@ -36,6 +36,9 @@ Channel.prototype.findWindow = function () {
     return this._window;
   }
   var target = this.options.target;
+  if (!target && this.options.iframe && this.options.iframe.id) {
+    target = '#' + this.options.iframe.id;
+  }
   if (typeof target === 'string') {
     var element = document.querySelector(target);
     if (!element || !element.contentWindow) {
@@ -48,7 +51,7 @@ Channel.prototype.findWindow = function () {
     this._window = target;
     return this._window;
   }
-  return new Error('no valid target was provided (eg. #iframeIdOrSelector, window.parent, someWindow)');
+  throw new Error('no valid target was provided (eg. #iframeIdOrSelector, window.parent, someWindow)');
 };
 
 function waitMessageResponse(self, id, timeout, resolve, reject) {
