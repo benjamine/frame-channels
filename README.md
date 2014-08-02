@@ -31,7 +31,9 @@ var channel = frameChannels.create('my-channel', {
   }
 });
 
-// send a message
+// send a message to the iframe
+// ready() ensures the iframe is built and
+// someone inside the iframe is listening (called channel.subscribe)
 channel.iframe.ready().then(function(){
   channel.push({ hello: 'world' });
   channel.subscribe(function(msg){
@@ -43,7 +45,7 @@ channel.iframe.ready().then(function(){
 Inside the iframe, open a channel with parent window
 
 ``` js
-var channelA = frameChannels.create('channel-a', {
+var channelA = frameChannels.create('my-channel', {
   target: window.parent
 });
 channel.push({ hello: 'parent' });
