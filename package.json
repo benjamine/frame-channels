@@ -55,7 +55,7 @@
     "harness": "mocha",
     "files": "test/*.js",
     "scripts": [
-      "build/bundle.js"
+      "build/frame-channels.js"
     ],
     "browsers": [
       "ie/8..latest",
