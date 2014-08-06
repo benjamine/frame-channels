@@ -2917,17 +2917,128 @@ function isUndefined(arg) {
 */
 require('./util/globals');
 
-describe('frameChannels', function(){
-  it('has a semver version', function(){
-    expect(frameChannels.version).to.match(/^\d+\.\d+\.\d+(-.*)?$/);
+// test real iframe creation only on browsers
+if (typeof window === 'undefined') {
+  return;
+}
+
+var echoIFrameChannel =  require('./util/echo-iframe-channel');
+
+describe('ChannelIFrame', function(){
+
+  beforeEach(function(){
+    this.channel = echoIFrameChannel.create();
   });
-  describe('.create', function(){
-    it('creates a new Channel', function(){
-      var channel = frameChannels.create('some name');
-      expect(channel).to.be.a(frameChannels.Channel);
+  describe('#ready', function(){
+    it('creates an iframe', function(done){
+      var channel = this.channel;
+      this.channel.iframe.ready().then(function(){
+        expect(channel.iframe.element.tagName).to.be('IFRAME');
+        done();
+      }, function(err){
+        done.fail(err);
+      });
+    });
+    when('targeting same iframe', function(){
+      beforeEach(function(done){
+        var context = this;
+        var channel = this.channel;
+        channel.iframe.ready().then(function(){
+          var channel2 = context.channel2 = echoIFrameChannel.create({
+            id: channel.iframe.element.id,
+            name: channel.name
+          });
+          channel2.iframe.ready().then(function(){
+            done();
+          }, function(err) {
+            done.fail(err);
+          });
+        }, function(err){
+          done.fail(err);
+        });
+      });
+      it('reuses same iframe element', function(){
+        expect(this.channel.iframe.element).to.be(this.channel2.iframe.element);
+      });
+      it('both get same messages', function(done){
+        var got = 0;
+        var channel = this.channel;
+        this.channel.subscribe(function(msg){
+          if (msg.ack) {
+            expect(msg.value).to.be('same thing');
+            got++;
+            if (got === 2) {
+              done();
+            }
+          }
+        });
+        var channel2 = this.channel2;
+        this.channel2.subscribe(function(msg){
+          if (msg.ack) {
+            expect(msg.value).to.be('same thing');
+            got++;
+            if (got === 2) {
+              done();
+            }
+          }
+        });
+        this.channel.iframe.ready().then(function(){
+          channel2.iframe.ready().then(function(){
+            channel.request('same thing');
+          }, function(err){
+            done.fail(err);
+          });
+        }, function(err){
+          done.fail(err);
+        });
+      });
+    });
+    it('reports when the iframe channel is ready', function(done){
+      this.channel.iframe.ready().then(function(){
+        done();
+      }, function(err){
+        done.fail(err);
+      });
+    });
+  });
+  when('iframe send first message right away', function(){
+    it('first message is received', function(done){
+      // create an iframe channel that sends a first message right away
+      var channel = echoIFrameChannel.create({
+        firstMessage: true
+      });
+      channel.subscribe(function(msg){
+        if (msg.firstMessage) {
+          expect(msg.firstMessage).to.be(true);
+          done();
+        }
+      });
+      channel.iframe.ready();
+    });
+  });
+  when('ready', function(){
+    beforeEach(function(done){
+      this.channel.iframe.ready().then(function(){
+        done();
+      }, function(err){
+        done.fail(err);
+      });
+    });
+    it('gets responses', function(done){
+      this.channel.request({ hi: 'there' }).then(function(response){
+        expect(response.ack).to.be(true);
+        done();
+      });
     });
   });
 });
+
+},{"./util/echo-iframe-channel":9,"./util/globals":10}],7:[function(require,module,exports){
+/*
+* mocha's bdd syntax is inspired in RSpec
+*   please read: http://betterspecs.org/
+*/
+require('./util/globals');
 
 var MockWindow = require('./util/mock-window');
 
@@ -2981,7 +3092,7 @@ describe('Channel', function(){
         this.channel2.subscribe(function(message, respond){
           respond(new Error('fake error'));
         });
-        this.channel1.push({ thanks: true, respond: true }).then(function(){
+        this.channel1.request({ thanks: true }).then(function(){
           done.fail('response not expected');
         }, function(err){
           expect(err.message).to.be('fake error');
@@ -2989,7 +3100,7 @@ describe('Channel', function(){
         });
       });
       it('errors if nobody responds', function(done){
-        this.channel1.push({ hello: 'world', respond: true }).then(function(){
+        this.channel1.request({ hello: 'world' }).then(function(){
           done.fail('response not expected');
         }, function(err){
           expect(err.timeout).to.be(true);
@@ -3032,7 +3143,72 @@ describe('Channel', function(){
   });
 });
 
-},{"./util/globals":7,"./util/mock-window":8}],7:[function(require,module,exports){
+},{"./util/globals":10,"./util/mock-window":11}],8:[function(require,module,exports){
+/*
+* mocha's bdd syntax is inspired in RSpec
+*   please read: http://betterspecs.org/
+*/
+require('./util/globals');
+
+describe('frameChannels', function(){
+  it('has a semver version', function(){
+    expect(frameChannels.version).to.match(/^\d+\.\d+\.\d+(-.*)?$/);
+  });
+  describe('.create', function(){
+    it('creates a new Channel', function(){
+      var channel = frameChannels.create('some name');
+      expect(channel).to.be.a(frameChannels.Channel);
+    });
+  });
+});
+
+require('./channel');
+require('./channel-iframe');
+
+},{"./channel":7,"./channel-iframe":6,"./util/globals":10}],9:[function(require,module,exports){
+require('./globals');
+
+var instanceCount = 0;
+
+function create(options) {
+  // create echo src-less iframe to talk to
+  var iframeHtml;
+  options = options || {};
+  if (!options.id) {
+    options.id = 'my-iframe-' + instanceCount;
+    iframeHtml = '<!doctype html><html><head>' +
+      document.querySelector('script[src*="/frame-channels.js"]').outerHTML +
+      '</head></body><sc'+'ript>' +
+        'var channel = frameChannels.create("echo channel #' + instanceCount +
+        '", { target: window.parent }).subscribe(function(msg, respond){'+
+          'if (respond) { respond({ ack: true, value: msg.value }); }' +
+        '});' +
+        (options.firstMessage ? 'channel.push({ firstMessage: true });' : '') +
+      '</scri'+'pt></body></html>';
+  }
+  if (!options.name) {
+    options.name = 'echo channel #' + instanceCount;
+  }
+  var channel = frameChannels.create(options.name, {
+    responseTimeout: 100,
+    iframe: {
+      id: options.id,
+      html: iframeHtml,
+      setup: function(element) {
+        element.style.width = '180px';
+        element.style.height = '50px';
+        element.style.zIndex = 999999;
+        channel.iframe.dock('bottom-right');
+      }
+    }
+  });
+  instanceCount++;
+  return channel;
+}
+
+exports.create = create;
+
+},{"./globals":10}],10:[function(require,module,exports){
 (function (global){
 
 global.when = function(){
@@ -3046,7 +3222,7 @@ global.frameChannels = (typeof window !== 'undefined' ? window.frameChannels : n
   require('../../' + 'src/main.js');
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"expect.js":1}],8:[function(require,module,exports){
+},{"expect.js":1}],11:[function(require,module,exports){
 
 var EventEmitter = require('events').EventEmitter;
 
@@ -3088,4 +3264,4 @@ MockWindow.prototype.removeEventListener = function(name, handler) {
 
 module.exports = MockWindow;
 
-},{"events":5}]},{},[6])
+},{"events":5}]},{},[8])

@@ -23,17 +23,17 @@ var channel = frameChannels.create('my-channel', {
   originFilter: /^http\:\/\/domain\.com\//,
   // (optional) timeout when waiting for a message response
   responseTimeout: 30000,
-  // (optional) let the iframe control it's own position with messages
+  // (optional) let the iframe control it's positioning with messages
   allowPositionControl: true
   // (optional) indicate how to create the iframe if it doesn't exists
   iframe: {
     id: 'my-iframe',
     url: 'http://domain.com/path',
     setup: function(element) {
-      element.style.width = '180px';
-      element.style.height = '50px';
-      element.style.zIndex = 999999;
+      channel.iframe.size(180, 50);
       channel.iframe.dock('bottom-right');
+      // iframe is invisible by default
+      channel.iframe.show();
     }
   }
 });
@@ -82,12 +82,31 @@ channel.push({
     console.log('great');
   }
 });
+
+// or simply
+channel.request({
+  question: 'areYouOk?'
+}).then(function(response) {
+  if (response.ok) {
+    console.log('great');
+  }
+});
+
+channel.request('location').then(function(response) {
+  console.log(response.city);
+});
+
 ```
+
+Note: `channel.request()` is just an alias to `push` that will set `message.respond=true`.
 
 ``` js
 channel.subscribe(function(msg, respond){
   if (msg.question === 'areYouOk?' && respond) {
     respond({ ok: true });
+  }
+  if (msg.value === 'location' && respond) {
+    respond({ city: 'Lima' });
   }
 });
 ```

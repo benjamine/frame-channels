@@ -708,14 +708,21 @@ ChannelIFrame.prototype.ready = function () {
         element = document.createElement('iframe');
         self.element = element;
         element.id = options.id;
-        element.src = options.url;
-        if (typeof options.setup === 'function') {
-          options.setup(element);
-        }
+        element.style.display = 'none';
         if (options.allowPositionControl) {
           self.subscribeToPositionMessages();
         }
         document.body.appendChild(element);
+        if (options.url) {
+          element.src = options.url;
+        } else if (options.html) {
+          var doc = element.contentDocument || element.contentWindow.document;
+          doc.write(options.html.toString());
+          doc.close();
+        }
+        if (typeof options.setup === 'function') {
+          options.setup(element);
+        }
       } else {
         self.element = element;
         try {
@@ -977,6 +984,15 @@ Channel.prototype.push = function(message) {
   });
 };
 
+Channel.prototype.request = function(message) {
+  var msg = message;
+  if (typeof msg !== 'object') {
+    msg = { value: msg };
+  }
+  msg.respond = true;
+  return this.push(msg);
+};
+
 Channel.prototype.originIsAllowed = function (origin) {
   var filter = this.options.originFilter;
   if (!filter) {
@@ -1043,6 +1059,7 @@ Channel.prototype.subscribe = function (handler) {
       this.notifyReady();
     }
   }
+  return this;
 };
 
 Channel.prototype.respondToPings = function(){
@@ -1071,6 +1088,7 @@ Channel.prototype.unsubscribe = function (handler) {
       this.handlers.splice(i, 1);
     }
   }
+  return this;
 };
 
 module.exports = Channel;
@@ -1094,7 +1112,7 @@ if (inNode) {
 } else {
   // exports only for browser bundle
 	exports.homepage = 'https://github.com/benjamine/frame-channels';
-	exports.version = '0.0.5';
+	exports.version = '0.0.6';
 }
 
 }).call(this,_dereq_("1YiZ5S"))

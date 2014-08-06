@@ -32,14 +32,21 @@ ChannelIFrame.prototype.ready = function () {
         element = document.createElement('iframe');
         self.element = element;
         element.id = options.id;
-        element.src = options.url;
-        if (typeof options.setup === 'function') {
-          options.setup(element);
-        }
+        element.style.display = 'none';
         if (options.allowPositionControl) {
           self.subscribeToPositionMessages();
         }
         document.body.appendChild(element);
+        if (options.url) {
+          element.src = options.url;
+        } else if (options.html) {
+          var doc = element.contentDocument || element.contentWindow.document;
+          doc.write(options.html.toString());
+          doc.close();
+        }
+        if (typeof options.setup === 'function') {
+          options.setup(element);
+        }
       } else {
         self.element = element;
         try {

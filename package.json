@@ -1,6 +1,6 @@
 {
   "name": "frame-channels",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "pub/sub channels between browser [i]frames",
   "main": "./src/main",
   "scripts": {
@@ -53,7 +53,7 @@
   },
   "testling": {
     "harness": "mocha",
-    "files": "test/*.js",
+    "files": "test/index.js",
     "scripts": [
       "build/frame-channels.js"
     ],

@@ -118,6 +118,15 @@ Channel.prototype.push = function(message) {
   });
 };
 
+Channel.prototype.request = function(message) {
+  var msg = message;
+  if (typeof msg !== 'object') {
+    msg = { value: msg };
+  }
+  msg.respond = true;
+  return this.push(msg);
+};
+
 Channel.prototype.originIsAllowed = function (origin) {
   var filter = this.options.originFilter;
   if (!filter) {
@@ -184,6 +193,7 @@ Channel.prototype.subscribe = function (handler) {
       this.notifyReady();
     }
   }
+  return this;
 };
 
 Channel.prototype.respondToPings = function(){
@@ -212,6 +222,7 @@ Channel.prototype.unsubscribe = function (handler) {
       this.handlers.splice(i, 1);
     }
   }
+  return this;
 };
 
 module.exports = Channel;
