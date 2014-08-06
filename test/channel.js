@@ -64,7 +64,7 @@ describe('Channel', function(){
         });
       });
       it('errors if nobody responds', function(done){
-        this.channel1.push({ hello: 'world' }).then(function(){
+        this.channel1.request({ hello: 'world' }).then(function(){
           done.fail('response not expected');
         }, function(err){
           expect(err.timeout).to.be(true);
