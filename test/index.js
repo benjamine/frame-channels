@@ -29,12 +29,12 @@ describe('Channel', function(){
     this.channel1 = frameChannels.create('the channel', {
       target: this.window2,
       myWindow: this.window1,
-      responseTimeout: 30
+      responseTimeout: 100
     });
     this.channel2 = frameChannels.create('the channel', {
       target: this.window1,
       myWindow: this.window2,
-      responseTimeout: 30
+      responseTimeout: 100
     });
   });
   describe('#push', function(){

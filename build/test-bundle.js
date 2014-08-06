@@ -2942,12 +2942,12 @@ describe('Channel', function(){
     this.channel1 = frameChannels.create('the channel', {
       target: this.window2,
       myWindow: this.window1,
-      responseTimeout: 30
+      responseTimeout: 100
     });
     this.channel2 = frameChannels.create('the channel', {
       target: this.window1,
       myWindow: this.window2,
-      responseTimeout: 30
+      responseTimeout: 100
     });
   });
   describe('#push', function(){
@@ -3050,7 +3050,11 @@ global.frameChannels = (typeof window !== 'undefined' ? window.frameChannels : n
 
 var EventEmitter = require('events').EventEmitter;
 
+var instanceCount = 0;
+
 function MockWindow(origin) {
+  this.instanceId = instanceCount;
+  instanceCount++;
   this.emitter = new EventEmitter();
   this.origin = origin || 'http://localhost';
   this.sourceOrigin = 'http://localhost';
@@ -3065,10 +3069,11 @@ MockWindow.prototype.postMessage = function(message, origin) {
   this.received.push(message);
   var self = this;
   var data = JSON.parse(JSON.stringify(message));
+  var selfOrigin = self.sourceOrigin;
   setTimeout(function(){
     self.emitter.emit('message', {
       data: data,
-      origin: self.sourceOrigin
+      origin: selfOrigin
     });
   }, 1);
 };
