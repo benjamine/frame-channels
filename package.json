@@ -4,7 +4,7 @@
   "description": "pub/sub channels between browser [i]frames",
   "main": "./src/main",
   "scripts": {
-    "test": "npm install && ./node_modules/.bin/gulp test test-browser",
+    "test": "npm install && gulp test && gulp test-browser",
     "cover": "istanbul cover _mocha",
     "cover-report": "open coverage/lcov-report/index.html",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
