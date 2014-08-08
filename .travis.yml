@@ -1,9 +1,18 @@
 language: node_js
 node_js:
   - "0.10"
+
 before_install:
   - "export BROWSERS=Firefox"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-after_script:
-  - npm run coveralls
+
+after_success:
+  - npm run cover-publish
+addons:
+  code_climate:
+    repo_token:
+      # npm i -g travis-encrypt
+      # # get your token from https://codeclimate.com/github/benjamine/frame-channels
+      # travis-encrypt -r benjamine/frame-channels CODECLIMATE_REPO_TOKEN=<projecttoken>
+      secure: "B/vxhGbxYOM5XyJH2k7JxZr9HmxVqXAcWBIOq7j6th0+QWhQpSExY2EiBX/nT9QiM3p95l2PxXBNpdY6Tsf6yDBH3aUQXuXIDFMTI5U3QcI1n5GG8vO5AfoQb18NuBhMV2VPHBLvKXXjdmk6ytkECHlfBfS8HHkR+addekfJBDo="

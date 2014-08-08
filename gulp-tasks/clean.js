@@ -1,8 +1,7 @@
 
 var gulp = require('gulp');
-var plugins = require('gulp-load-plugins')();
+var rimraf = require('rimraf');
 
-gulp.task('clean', function() {
-    return gulp.src(['./build'], {read: false})
-        .pipe(plugins.clean());
+gulp.task('clean', function(callback) {
+  rimraf('./build', callback);
 });

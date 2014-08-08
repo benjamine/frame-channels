@@ -1,13 +1,13 @@
 {
   "name": "frame-channels",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "pub/sub channels between browser [i]frames",
   "main": "./src/main",
   "scripts": {
-    "test": "npm install && gulp test && gulp test-browser",
-    "cover": "istanbul cover _mocha",
+    "test": "gulp test && gulp test-browser",
+    "cover": "istanbul cover --root src gulp test",
     "cover-report": "open coverage/lcov-report/index.html",
-    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+    "cover-publish": "istanbul cover _mocha --report lcovonly && codeclimate < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/benjamine/frame-channels",
   "devDependencies": {
-    "coveralls": "^2.11.1",
+    "codeclimate-test-reporter": "0.0.3",
     "expect.js": "~0.3.1",
     "gulp": "~3.8.6",
     "gulp-browserify": "~0.4.4",
@@ -55,7 +55,8 @@
     "mocha": "~1.17.1",
     "mocha-lcov-reporter": "0.0.1",
     "require-dir": "~0.1.0",
-    "underscore.string": "^2.3.3"
+    "underscore.string": "^2.3.3",
+    "rimraf": "~2.2.8"
   },
   "testling": {
     "harness": "mocha",

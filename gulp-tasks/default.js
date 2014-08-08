@@ -1,7 +1,4 @@
 
 var gulp = require('gulp');
 
-gulp.task('default', [
-  'bundle',
-  'test'
-]);
+gulp.task('default', ['test']);
