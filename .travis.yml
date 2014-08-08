@@ -12,7 +12,7 @@ after_success:
 addons:
   code_climate:
     repo_token:
-      # npm i -g travis-encrypt
       # # get your token from https://codeclimate.com/github/benjamine/frame-channels
-      # travis-encrypt -r benjamine/frame-channels CODECLIMATE_REPO_TOKEN=<projecttoken>
-      secure: "B/vxhGbxYOM5XyJH2k7JxZr9HmxVqXAcWBIOq7j6th0+QWhQpSExY2EiBX/nT9QiM3p95l2PxXBNpdY6Tsf6yDBH3aUQXuXIDFMTI5U3QcI1n5GG8vO5AfoQb18NuBhMV2VPHBLvKXXjdmk6ytkECHlfBfS8HHkR+addekfJBDo="
+      # gem install travis
+      # travis encrypt <projecttoken>
+      secure: "dt7zkd2W6MVF1L3VIzAmRsV7+qXVEYi57CypSRIbX//6W2Ar5ygnzJaZ8cNSOmSGvVkKvF5y7ubP7Z9QDWaZh3jTunvBSqZabf1Qo9wvia58Ojj5oWbIQAWvAZJAt43moRBxTahLocvPsQtcS3VJgTdjvAGRqHQTLri6Upi9lDk="
