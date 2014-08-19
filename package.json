@@ -7,7 +7,8 @@
     "test": "gulp test && gulp test-browser",
     "cover": "istanbul cover --root src gulp test",
     "cover-report": "open coverage/lcov-report/index.html",
-    "cover-publish": "istanbul cover _mocha --report lcovonly && codeclimate < coverage/lcov.info"
+    "cover-publish": "istanbul cover _mocha --report lcovonly && codeclimate < coverage/lcov.info",
+    "bump": "gulp bump"
   },
   "repository": {
     "type": "git",
