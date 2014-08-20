@@ -17,8 +17,11 @@ function publish(){
         exec('git clone --depth 1 ' + packageInfo.repository.url + ' -b master ./gh-pages');
       }
       console.log('./gh-pages folder created');
+      cd('./gh-pages');
+    } else {
+      cd('./gh-pages');
+      exec('git pull origin');
     }
-    cd('./gh-pages');
     if (exec('git symbolic-ref --short HEAD').output !== 'gh-pages\n') {
       if (!(exec('git branch --list gh-pages').output ||
         exec('git branch --list -r origin/gh-pages').output)) {
