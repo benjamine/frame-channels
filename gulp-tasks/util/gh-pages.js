@@ -10,7 +10,7 @@ function publish(){
     // update/create github page
     if (!test('-d', './gh-pages')) {
       console.log('creating ./gh-pages');
-      exec('git clone --depth 0 ' + packageInfo.repository.url + ' ./gh-pages');
+      exec('git clone --depth 1 ' + packageInfo.repository.url + ' ./gh-pages');
       console.log('./gh-pages folder created');
     }
     cd('./gh-pages');
