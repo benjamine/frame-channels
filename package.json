@@ -1,6 +1,6 @@
 {
   "name": "frame-channels",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "description": "pub/sub channels between browser [i]frames",
   "main": "./src/main",
   "scripts": {
