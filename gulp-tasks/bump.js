@@ -1,8 +1,10 @@
 var gulp = require('gulp');
 var path = require('path');
 require('shelljs/global');
-/*global config, exec, cd, test, cp */
+/*global config, exec, cd */
 config.fatal = true;
+
+var ghPages = require('./util/gh-pages');
 
 gulp.task('bump', [], function(callback) {
   var packageInfo = require('../package');
@@ -19,34 +21,7 @@ gulp.task('bump', [], function(callback) {
     exec('git commit --amend --no-edit');
   }
 
-  if (packageInfo.repository && test('-d', './pages')) {
-    // update gh-pages
-    if (!test('-d', './gh-pages')) {
-      console.log('creating submodule for gh-pages');
-      exec('git submodule add --force ' + packageInfo.repository.url + ' gh-pages');
-      console.log('submodule created');
-    }
-    cd('./gh-pages');
-    if (exec('git symbolic-ref --short HEAD') !== 'gh-pages') {
-      if (exec('git branch --list gh-pages') !== 'gh-pages') {
-        console.log('creating gh-pages branch');
-        exec('git checkout --orphan gh-pages');
-        exec('git reset --hard');
-      } else {
-        console.log('checking out gh-pages');
-        exec('git checkout gh-pages');
-      }
-    }
-    cp('-R', '../pages/*', './');
-    cp('-R', '../build/*', './build');
-    if (exec('git status --porcelain .')) {
-      console.log('updating gh-pages');
-      exec('git add --all .');
-      exec('git commit --no-edit -m "version bump"');
-      exec('git push');
-    }
-    cd('..');
-  }
+  ghPages.publish();
 
   exec('git push');
   exec('git push --tags');
