@@ -14,8 +14,8 @@ function publish(){
       console.log('submodule created');
     }
     cd('./gh-pages');
-    if (exec('git symbolic-ref --short HEAD') !== 'gh-pages') {
-      if (exec('git branch --list gh-pages') !== 'gh-pages') {
+    if (exec('git symbolic-ref --short HEAD').output !== 'gh-pages\n') {
+      if (!exec('git branch --list gh-pages').output) {
         console.log('creating gh-pages branch');
         exec('git checkout --orphan gh-pages');
         exec('git reset --hard');
@@ -26,14 +26,14 @@ function publish(){
     }
     cp('-R', '../pages/*', './');
     cp('-R', '../build/*', './build');
-    if (exec('git status --porcelain .')) {
+    if (exec('git status --porcelain .').output) {
       console.log('updating gh-pages');
       exec('git add --all .');
       exec('git commit --no-edit -m "version bump"');
       exec('git push');
     }
     cd('..');
-    if (exec('git status --porcelain ./gh-pages')) {
+    if (exec('git status --porcelain ./gh-pages').output) {
       exec('git add --all ./gh-pages');
       exec('git add --all .gitmodules');
       exec('git commit --no-edit -m "update gh-pages"');
