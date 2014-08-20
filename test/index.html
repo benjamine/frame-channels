@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>frame-channels behavior</title>
+  <link rel="stylesheet" href="../build/test/mocha.css" />
+  <script src="../build/test/mocha.js"></script>
+  <script>mocha.setup('bdd');</script>
+  <script src="../build/frame-channels.js"></script>
+  <script src="../build/test-bundle.js"></script>
+  <style>
+    h1 {
+      margin: 0.5em;
+    }
+    body > div {
+      margin: 20px;
+    }
+    #mocha {
+      margin: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>frame-channels behavior</h1>
+  <div id="links">
+    
+    <a href="https://github.com/benjamine/frame-channels.git">repository<a/>
+    
+    
+    <a href="https://github.com/benjamine/frame-channels">homepage<a/>
+    
+  </div>
+  <div id="mocha"></div>
+  <script>
+    mocha.checkLeaks();
+    mocha.run();
+  </script>
+</body>
+</html>
