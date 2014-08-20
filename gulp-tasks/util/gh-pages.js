@@ -40,6 +40,7 @@ function publish(){
     }
     cd('..');
     if (!grep('gh-pages', '.gitignore')) {
+      console.log('adding gh-pages to .gitignore');
       exec('echo "gh-pages" >> .gitignore');
       exec('git add .gitignore');
       exec('git commit --no-edit -m "adds gh-pages to gitignore"');
