@@ -22,7 +22,7 @@ gulp.task('bump', [], function(callback) {
   if (packageInfo.repository && test('-d', './pages')) {
     // update gh-pages
     if (!test('-d', './gh-pages')) {
-      exec('git submodule add ' + packageInfo.repository.url + ' gh-pages');
+      exec('git submodule add ' + packageInfo.repository + ' gh-pages');
     }
     cd('./gh-pages');
     if (exec('git rev-parse --abbrev-ref HEAD') !== 'gh-pages') {
