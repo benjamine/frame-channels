@@ -22,20 +22,24 @@ gulp.task('bump', [], function(callback) {
   if (packageInfo.repository && test('-d', './pages')) {
     // update gh-pages
     if (!test('-d', './gh-pages')) {
+      gulp.log('creating submodule for gh-pages');
       exec('git submodule add ' + packageInfo.repository.url + ' gh-pages');
     }
     cd('./gh-pages');
     if (exec('git rev-parse --abbrev-ref HEAD') !== 'gh-pages') {
       if (exec('git branch --list gh-pages') !== 'gh-pages') {
+        gulp.log('creating gh-pages branch');
         exec('git checkout --orphan gh-pages');
         exec('git reset --hard');
       } else {
-        exec('git checkout --force gh-pages');
+        gulp.log('checking out gh-pages');
+        exec('git checkout gh-pages');
       }
     }
     cp('-R', '../pages/*', './');
     cp('-R', '../build/*', './build');
     if (exec('git status --porcelain .')) {
+      gulp.log('updating gh-pages');
       exec('git add --all .');
       exec('git commit --no-edit -m "version bump"');
       exec('git push');
