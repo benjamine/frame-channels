@@ -1,4 +1,5 @@
 var path = require('path');
+var fs = require('fs');
 require('shelljs/global');
 /*global config, exec, cd, test, cp, grep */
 config.fatal = true;
@@ -41,7 +42,7 @@ function publish(){
     cd('..');
     if (!grep('gh-pages', '.gitignore')) {
       console.log('adding gh-pages to .gitignore');
-      exec('echo "gh-pages" >> .gitignore');
+      fs.appendFileSync('.gitignore', '\ngh-pages');
       exec('git add .gitignore');
       exec('git commit --no-edit -m "adds gh-pages to gitignore"');
     }
