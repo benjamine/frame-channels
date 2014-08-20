@@ -28,6 +28,7 @@ gulp.task('bump', [], function(callback) {
     if (exec('git rev-parse --abbrev-ref HEAD') !== 'gh-pages') {
       if (exec('git branch --list gh-pages') !== 'gh-pages') {
         exec('git checkout --orphan gh-pages');
+        exec('git reset --hard');
       } else {
         exec('git checkout gh-pages');
       }
