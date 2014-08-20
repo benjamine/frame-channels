@@ -31,7 +31,7 @@ function publish(){
       console.log('updating gh-pages');
       exec('git add --all .');
       exec('git commit --no-edit -m "version bump"');
-      exec('git push');
+      exec('git push origin');
     }
     cd('..');
     if (!grep('gh-pages', '.gitignore')) {

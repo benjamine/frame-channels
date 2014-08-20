@@ -23,8 +23,8 @@ gulp.task('bump', [], function(callback) {
 
   ghPages.publish();
 
-  exec('git push');
-  exec('git push --tags');
+  exec('git push origin');
+  exec('git push --tags origin');
   if (packageInfo.private) {
     console.log('private package, skipping npm publish');
     callback();
