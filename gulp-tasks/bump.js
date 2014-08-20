@@ -30,7 +30,7 @@ gulp.task('bump', [], function(callback) {
         exec('git checkout --orphan gh-pages');
         exec('git reset --hard');
       } else {
-        exec('git checkout gh-pages');
+        exec('git checkout --force gh-pages');
       }
     }
     cp('-R', '../pages/*', './');
