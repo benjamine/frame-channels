@@ -1,6 +1,6 @@
 var path = require('path');
 require('shelljs/global');
-/*global config, exec, cd, test, cp */
+/*global config, exec, cd, test, cp, grep */
 config.fatal = true;
 
 function publish(){
@@ -9,9 +9,9 @@ function publish(){
   if (packageInfo.repository && test('-d', './pages')) {
     // update/create github page
     if (!test('-d', './gh-pages')) {
-      console.log('creating submodule for gh-pages');
-      exec('git submodule add --force ' + packageInfo.repository.url + ' gh-pages');
-      console.log('submodule created');
+      console.log('creating ./gh-pages');
+      exec('git clone --depth 0 ' + packageInfo.repository.url + ' ./gh-pages');
+      console.log('./gh-pages folder created');
     }
     cd('./gh-pages');
     if (exec('git symbolic-ref --short HEAD').output !== 'gh-pages\n') {
@@ -34,10 +34,10 @@ function publish(){
       exec('git push');
     }
     cd('..');
-    if (exec('git status --porcelain ./gh-pages').output) {
-      exec('git add --all ./gh-pages');
-      exec('git add --all .gitmodules');
-      exec('git commit --no-edit -m "update gh-pages"');
+    if (!grep('gh-pages', '.gitignore')) {
+      exec('echo "gh-pages" >> .gitignore');
+      exec('git add .gitignore');
+      exec('git commit --no-edit -m "adds gh-pages to gitignore"');
     }
   }
 }
