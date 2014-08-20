@@ -24,8 +24,8 @@ function publish(){
         exec('git checkout gh-pages');
       }
     }
-    cp('-R', '../pages/*', './');
-    cp('-R', '../build/*', './build');
+    cp('-Rf', '../pages/*', './');
+    cp('-Rf', '../build/*', './build');
     if (exec('git status --porcelain .').output) {
       console.log('updating gh-pages');
       exec('git add --all .');
