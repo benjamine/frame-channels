@@ -27,7 +27,7 @@ gulp.task('bump', [], function(callback) {
       console.log('submodule created');
     }
     cd('./gh-pages');
-    if (exec('git rev-parse --abbrev-ref HEAD') !== 'gh-pages') {
+    if (exec('git symbolic-ref --short HEAD') !== 'gh-pages') {
       if (exec('git branch --list gh-pages') !== 'gh-pages') {
         console.log('creating gh-pages branch');
         exec('git checkout --orphan gh-pages');
