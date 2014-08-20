@@ -15,7 +15,8 @@ function publish(){
     }
     cd('./gh-pages');
     if (exec('git symbolic-ref --short HEAD').output !== 'gh-pages\n') {
-      if (!exec('git branch --list gh-pages').output) {
+      if (!(exec('git branch --list gh-pages').output ||
+        exec('git branch --list -r origin/gh-pages').output)) {
         console.log('creating gh-pages branch');
         exec('git checkout --orphan gh-pages');
         exec('git reset --hard');
