@@ -24,6 +24,7 @@ gulp.task('bump', [], function(callback) {
     if (!test('-d', './gh-pages')) {
       console.log('creating submodule for gh-pages');
       exec('git submodule add --force ' + packageInfo.repository.url + ' gh-pages');
+      console.log('submodule created');
     }
     cd('./gh-pages');
     if (exec('git rev-parse --abbrev-ref HEAD') !== 'gh-pages') {
