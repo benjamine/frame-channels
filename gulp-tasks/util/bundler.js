@@ -106,8 +106,6 @@ function auto() {
       .pipe(gulp.dest('build/test'));
     gulp.src('node_modules/mocha/mocha.css')
       .pipe(gulp.dest('build/test'));
-    gulp.src('test/index.html')
-      .pipe(gulp.dest('build/test'));
   });
   tasks.push('copy-test-resources');
 

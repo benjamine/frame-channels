@@ -26,6 +26,7 @@ function publish(){
     }
     cp('-Rf', '../pages/*', './');
     cp('-Rf', '../build/*', './build');
+    cp('-Rf', '../test/index.html', './test');
     if (exec('git status --porcelain .').output) {
       console.log('updating gh-pages');
       exec('git add --all .');
