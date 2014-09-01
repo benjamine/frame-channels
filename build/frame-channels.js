@@ -161,8 +161,8 @@ function asap(callback, arg) {
 }
 
 exports.asap = asap;
-}).call(this,_dereq_("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"1YiZ5S":11}],4:[function(_dereq_,module,exports){
+}).call(this,_dereq_("398hpC"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"398hpC":11}],4:[function(_dereq_,module,exports){
 "use strict";
 var config = {
   instrument: false
@@ -1112,10 +1112,10 @@ if (inNode) {
 } else {
   // exports only for browser bundle
 	exports.homepage = 'https://github.com/benjamine/frame-channels';
-	exports.version = '0.0.51';
+	exports.version = '0.0.57';
 }
 
-}).call(this,_dereq_("1YiZ5S"))
-},{"./channel":13,"1YiZ5S":11}]},{},[14])
+}).call(this,_dereq_("398hpC"))
+},{"./channel":13,"398hpC":11}]},{},[14])
 (14)
 });
