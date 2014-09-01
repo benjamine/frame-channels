@@ -1112,7 +1112,7 @@ if (inNode) {
 } else {
   // exports only for browser bundle
 	exports.homepage = 'https://github.com/benjamine/frame-channels';
-	exports.version = '0.0.52';
+	exports.version = '0.0.53';
 }
 
 }).call(this,_dereq_("398hpC"))
