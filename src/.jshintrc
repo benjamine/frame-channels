@@ -1,0 +1,7 @@
+{
+  "extends": "../jshintrc.json",
+  // Custom Globals
+  "predef"        : [
+    "-Promise"
+  ]
+}
