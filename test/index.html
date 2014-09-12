@@ -5,7 +5,7 @@
   <title>frame-channels behavior</title>
   <link rel="stylesheet" href="../build/test/mocha.css" />
   <script src="../build/test/mocha.js"></script>
-  <script>mocha.setup('bdd');</script>
+  <script>window.mocha.setup('bdd');</script>
   <script src="../build/frame-channels.js"></script>
   <script src="../build/test-bundle.js"></script>
   <style>
@@ -17,6 +17,26 @@
     }
     #mocha {
       margin: 30px;
+    }
+    .on-fail, .on-success {
+      display: none;
+    }
+    body.fail {
+      background: #fbb;
+      transition: all 3s;
+    }
+    body.fail .on-fail {
+      display: inline-block;
+    }
+    body.success {
+      background: #cfc;
+      transition: all 3s;
+    }
+    body.success .on-success {
+      display: inline-block;
+    }
+    body.done .before-done {
+      display: none;
     }
   </style>
 </head>
@@ -32,8 +52,24 @@
   </div>
   <div id="mocha"></div>
   <script>
-    mocha.checkLeaks();
-    mocha.run();
+    function done(result) {
+      var classes = (document.body.getAttribute('class') || '')
+        .replace(/ (done|fail|success)/g, '') +
+        ' done ' + result;
+      document.body.setAttribute('class', classes);
+    }
+    try {
+      var mocha = window.mocha;
+      mocha.checkLeaks();
+      var runner = mocha.run();
+      runner.on('end', function(){
+        done(runner.failures ? 'fail' : 'success');
+      });
+    } catch(err) {
+      console.log('error on mocha setup');
+      console.log(err);
+      done('fail');
+    }
   </script>
 </body>
 </html>
