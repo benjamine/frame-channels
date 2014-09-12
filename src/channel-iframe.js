@@ -102,12 +102,12 @@ ChannelIFrame.prototype.subscribeToPositionMessages = function() {
 };
 
 ChannelIFrame.prototype.show = function() {
-  this.element.display = '';
+  this.element.style.display = '';
   return this;
 };
 
 ChannelIFrame.prototype.hide = function() {
-  this.element.display = 'none';
+  this.element.style.display = 'none';
   return this;
 };
 
