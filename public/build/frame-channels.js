@@ -11,7 +11,7 @@ exports.create = function channel(name, options) {
 
 if (process.browser) {
   // exports only for browser bundle
-  exports.version = '0.0.64';
+  exports.version = '0.0.65';
   exports.homepage = 'https://github.com/benjamine/frame-channels';
 } else {
   // exports only for node.js
