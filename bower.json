@@ -1,7 +1,7 @@
 {
   "name": "frame-channels",
   "description": "pub/sub channels between browser [i]frames",
-  "main": "build/frame-channels.js",
+  "main": "public/build/frame-channels.js",
   "license": "MIT",
   "authors": [
     "Benjamin Eidelman <beneidel@gmail.com>"

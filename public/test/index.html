@@ -59,9 +59,8 @@
       document.body.setAttribute('class', classes);
     }
     try {
-      var mocha = window.mocha;
-      mocha.checkLeaks();
-      var runner = mocha.run();
+      window.mocha.checkLeaks();
+      var runner = window.mocha.run();
       runner.on('end', function(){
         done(runner.failures ? 'fail' : 'success');
       });

@@ -3,8 +3,8 @@ module.exports = function(config) {
     basePath: '.',
     frameworks: ['mocha'],
     files: [
-      'build/frame-channels.js',
-      'build/test-bundle.js'
+      'public/build/frame-channels.js',
+      'public/build/test-bundle.js'
     ],
     reporters : ['spec', 'growler']
   });
